@@ -1,0 +1,10 @@
+.table_item {
+    /* width: 50%; */
+    border: 1px solid;
+    padding: 5px;
+}
+
+.table_heading {
+    padding: 5px;
+    font-weight: bold;
+}
