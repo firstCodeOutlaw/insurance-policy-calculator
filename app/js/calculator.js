@@ -15,22 +15,20 @@ function checkIfSpecialHour() {
  */
 function createResultTable(response) {
     // Labels column
-    const labelColumn = `<div></div>
+    document.querySelector("#labels_div").innerHTML = `<div></div>
     <div class="table_item">Value</div>
     <div class="table_item">Base Premium (${response.policy.base_premium_percentage})</div>
     <div class="table_item">Commission (${response.policy.commission_percentage})</div>
     <div class="table_item">Tax (${response.policy.tax_percentage})</div>
     <div class="table_item" style="font-weight: bold;">Total Cost</div>`;
-    document.querySelector("#labels_div").innerHTML = labelColumn;
 
     // Policy column
-    const policyColumn = `<div class="table_heading">Policy</div>
+    document.querySelector("#policy_div").innerHTML = `<div class="table_heading">Policy</div>
     <div class="table_item">${response.policy.car_value}</div>
     <div class="table_item">${response.policy.base_premium}</div>
     <div class="table_item">${response.policy.commission}</div>
     <div class="table_item">${response.policy.tax}</div>
     <div class="table_item" style="font-weight: bold;">${response.policy.total}</div>`;
-    document.querySelector("#policy_div").innerHTML = policyColumn;
 
     // Installment Column(s)
     document.querySelector("#installment_div").innerHTML = "";

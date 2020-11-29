@@ -1,0 +1,8 @@
+<?php
+
+class Config
+{
+    const NORMAL_BASE_PRICE_PERCENTAGE = 11;
+    const SPECIAL_BASE_PRICE_PERCENTAGE = 13;
+    const COMMISSION_PERCENTAGE = 17;
+}
