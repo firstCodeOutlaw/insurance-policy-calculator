@@ -3,8 +3,10 @@
 namespace Request;
 
 require_once __DIR__ . '/Interfaces/IRequest.php';
+require_once __DIR__ . '/validation.php';
 
 use app\Interfaces\IRequest;
+use Request\Validation;
 
 /**
  * Class Request
@@ -48,6 +50,9 @@ class Request implements IRequest
     public function __construct()
     {
         $input = json_decode(file_get_contents('php://input'));
+        // Validate request parameters
+        new Validation($input);
+
         $this->setCarValue($input->estimated_value);
         $this->setTaxPercentage($input->tax_percentage);
         $this->setInstallmentCount($input->number_of_installments);
