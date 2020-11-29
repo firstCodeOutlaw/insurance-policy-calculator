@@ -6,7 +6,6 @@ require_once __DIR__ . '/Interfaces/IRequest.php';
 require_once __DIR__ . '/validation.php';
 
 use app\Interfaces\IRequest;
-use Request\Validation;
 
 /**
  * Class Request
