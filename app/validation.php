@@ -2,7 +2,11 @@
 
 namespace Request;
 
-class Validation
+require_once __DIR__ . '/Interfaces/IValidation.php';
+
+use app\Interfaces\IValidation;
+
+class Validation implements IValidation
 {
     const MINIMUM_CAR_VALUE = 100;
     const MAXIMUM_CAR_VALUE = 100000;
@@ -11,7 +15,7 @@ class Validation
 
     public function __construct($request)
     {
-        $this->checkInstallments($request->number_of_installments);
+        $this->checkInstallmentCount($request->number_of_installments);
         $this->checkCarValue($request->estimated_value);
         $this->checkTaxPercentage($request->tax_percentage);
         $this->checkSpecialHour($request->is_special_hour);
@@ -23,7 +27,7 @@ class Validation
      * @param $value
      * @throws \Exception
      */
-    public function checkInstallments($value)
+    public function checkInstallmentCount($value)
     {
         $value = (int) $value;
 
@@ -78,6 +82,8 @@ class Validation
      */
     public function checkSpecialHour($value)
     {
+        $value = (int) $value;
+
         if ($value < 0 || $value > 1) {
             throw new \Exception('Special hour is invalid');
         }

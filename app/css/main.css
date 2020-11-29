@@ -1,5 +1,4 @@
 .table_item {
-    /* width: 50%; */
     border: 1px solid;
     padding: 5px;
 }
@@ -12,4 +11,9 @@
 .notice {
     font-size: small;
     display: none;
+}
+
+input {
+    padding: 5px;
+    margin-bottom: 10px;
 }
