@@ -12,8 +12,8 @@ use app\Interfaces\IInsurance;
 /**
  * Class Insurance
  *
- * Calculations are done in cents to control issues with
- * floating point arithmetic
+ * Money values are stored in integer. Final result is then divided
+ * by 100 to avoid errors with using float in PHP.
  *
  * @author Benjamin Ayangbola
  */
@@ -23,7 +23,7 @@ class Insurance extends Request implements IInsurance
      * Base price of policy which can be 11% or 13% depending on
      * date and time of when calculation was done
      *
-     * @var float
+     * @var int
      */
     private $basePrice;
 
@@ -31,21 +31,21 @@ class Insurance extends Request implements IInsurance
      * A percentage of estimated car value. Percentage to use is
      * defined in app/config.php
      *
-     * @var float
+     * @var int
      */
     private $commission;
 
     /**
      * A user defined percentage of estimated car value
      *
-     * @var float
+     * @var int
      */
     private $tax;
 
     /**
      * Sum of base price, tax and commission
      *
-     * @var float
+     * @var int
      */
     private $totalPolicySum;
 
@@ -79,8 +79,8 @@ class Insurance extends Request implements IInsurance
     private function setBasePrice()
     {
         $this->basePrice = $this->fallsWithinSpecialHour()
-            ? ( (Config::SPECIAL_BASE_PRICE_PERCENTAGE/100) * $this->getCarValue() ) * 100
-            : ( (Config::NORMAL_BASE_PRICE_PERCENTAGE/100) * $this->getCarValue() ) * 100;
+            ? Config::SPECIAL_BASE_PRICE_PERCENTAGE * $this->getCarValue()
+            : Config::NORMAL_BASE_PRICE_PERCENTAGE * $this->getCarValue();
     }
 
     public function getBasePrice()
@@ -90,7 +90,7 @@ class Insurance extends Request implements IInsurance
 
     private function setCommission()
     {
-        $this->commission = ( (Config::COMMISSION_PERCENTAGE/100) * $this->getCarValue() ) * 100;
+        $this->commission = Config::COMMISSION_PERCENTAGE * $this->getCarValue();
     }
 
     public function getCommission()
@@ -100,7 +100,7 @@ class Insurance extends Request implements IInsurance
 
     private function setTax()
     {
-        $this->tax = ( ($this->getTaxPercentage()/100) * $this->getCarValue() ) * 100;
+        $this->tax = $this->getTaxPercentage() * $this->getCarValue();
     }
 
     public function getTax()
@@ -135,20 +135,22 @@ class Insurance extends Request implements IInsurance
 
     public function withInstallments()
     {
-        for ($i = 0; $i < $this->getInstallmentCount(); $i++) {
-            $box = new Installment(
-                $this->getInstallmentCount(),
-                $this->basePrice,
-                $this->commission,
-                $this->tax
-            );
+        if ($this->getInstallmentCount() > 1) {
+            for ($i = 0; $i < $this->getInstallmentCount(); $i++) {
+                $box = new Installment(
+                    $this->getInstallmentCount(),
+                    $this->basePrice,
+                    $this->commission,
+                    $this->tax
+                );
 
-            // Add remainder for last iteration in loop
-            if ( $i === ($this->getInstallmentCount() - 1) ) {
-                $box->addDifferenceToTotal($this->getTotalPolicySum());
+                // Add remainder for last iteration in loop
+                if ( $i === ($this->getInstallmentCount() - 1) ) {
+                    $box->addDifferenceToTotal($this->totalPolicySum);
+                }
+
+                array_push($this->installment, $box->inCurrencyFormat());
             }
-
-            array_push($this->installment, $box->inCurrencyFormat());
         }
 
         return $this;

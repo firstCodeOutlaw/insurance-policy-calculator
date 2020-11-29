@@ -8,3 +8,8 @@
     padding: 5px;
     font-weight: bold;
 }
+
+.notice {
+    font-size: small;
+    display: none;
+}

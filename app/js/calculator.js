@@ -14,6 +14,8 @@ function checkIfSpecialHour() {
  * Create view that holds the result of insurance calculations
  */
 function createResultTable(response) {
+    // Hide notice
+    document.querySelector("#notice").style.display = 'none';
     // Labels column
     document.querySelector("#labels_div").innerHTML = `<div></div>
     <div class="table_item">Value</div>
@@ -33,7 +35,7 @@ function createResultTable(response) {
     // Installment Column(s)
     document.querySelector("#installment_div").innerHTML = "";
     // Loop through installments if there are any
-    if (response.installments) {
+    if (response.installments.length) {
         response.installments.forEach((item, index) => {
         const installmentColumn = `<div style="display: inline-block;">
             <div class="table_heading">${index + 1} Installment</div>
@@ -42,9 +44,11 @@ function createResultTable(response) {
             <div class="table_item">${item.commission}</div>
             <div class="table_item">${item.tax}</div>
             <div class="table_item" style="font-weight: bold;">${item.total}</div>
-        </div>`;
-        document.querySelector("#installment_div").innerHTML += installmentColumn;
-    });
+            </div>`;
+            document.querySelector("#installment_div").innerHTML += installmentColumn;
+        });
+        // Show notice
+        document.querySelector("#notice").style.display = 'block';
     }
 }
 
