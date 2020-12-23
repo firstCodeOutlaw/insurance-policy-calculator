@@ -1,2 +1,2 @@
-# task-2
-Write a simple car insurance calculator which will output price of the policy using vanilla PHP and Javascript
+# Insurance Policy Calculator
+A simple car insurance calculator which outputs the breakdown of money payable under an insurance policy using vanilla PHP and Javascript
